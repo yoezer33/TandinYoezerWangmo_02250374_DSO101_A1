@@ -1,0 +1,2 @@
+# TandinYoezerWangmo_02250374_DSO101_A1
+https://github.com/yoezer33/TandinYoezerWangmo_02250374_DSO101_A1.git
