@@ -22,6 +22,10 @@ jobs:
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/be-todo:latest ./backend
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/be-todo:latest
 
+      - name: Trigger Render Deployment
+        run: |
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+
   deploy-frontend:
     runs-on: ubuntu-latest
     steps:
