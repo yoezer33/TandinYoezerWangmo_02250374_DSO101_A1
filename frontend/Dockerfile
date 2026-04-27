@@ -2,9 +2,9 @@ FROM node:18-alpine AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm install --legacy-peer-deps
-RUN chmod +x node_modules/.bin/react-scripts
 COPY . .
-RUN npm run build
+RUN chmod +x ./node_modules/.bin/react-scripts
+RUN ./node_modules/.bin/react-scripts build
 
 FROM nginx:alpine
 COPY --from=build /app/build /usr/share/nginx/html
