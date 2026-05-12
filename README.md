@@ -6,6 +6,170 @@ https://github.com/yoezer33/TandinYoezerWangmo_02250374_DSO101_A1.git
 - **Name:** Tandin Yoezer Wangmo
 - **Student ID:** 02250374
 ---
+
+# DSO101 Assignment 2 - CI/CD Pipeline with Jenkins
+**Student:** Tandin Yoezer Wangmo  
+**Student ID:** 02250374  
+**Course:** DSO101 - Continuous Integration and Continuous Deployment  
+
+---
+
+## Overview
+This assignment shows how  the setup of a Jenkins CI/CD pipeline to automate the build, test, and deployment of a Todo List React application developed in Assignment 1.
+
+---
+
+## Tools & Technologies
+| Tool | Purpose |
+|------|---------|
+| Jenkins | CI/CD automation |
+| GitHub | Source code hosting |
+| Node.js 26.1.0 | JavaScript runtime |
+| Jest | Unit testing framework |
+| jest-junit | JUnit test reports for Jenkins |
+| React | Frontend framework |
+| npm | Package management |
+
+---
+
+## Pipeline Stages
+The Jenkins pipeline have of the 3 stages:
+
+### 1. Checkout
+Pulls the latest source code from the GitHub repository:https://github.com/yoezer33/TandinYoezerWangmo_02250374_DSO101_A1
+### 2. Install
+Installs all required Node.js dependencies using:
+```bash
+npm install
+```
+
+### 3. Test
+Runs unit tests using Jest with JUnit reporting:
+```bash
+npm test
+```
+
+---
+
+## Pipeline Configuration
+
+### Jenkinsfile
+```groovy
+pipeline {
+    agent any
+    tools {
+        nodejs 'NodeJS'
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/yoezer33/TandinYoezerWangmo_02250374_DSO101_A1.git'
+            }
+        }
+        stage('Install') {
+            steps {
+                bat 'npm install'
+            }
+        }
+        stage('Test') {
+            steps {
+                bat 'npm test'
+            }
+        }
+    }
+}
+```
+
+### package.json Test Configuration
+```json
+"scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "jest --ci --reporters=default --reporters=jest-junit"
+},
+"devDependencies": {
+    "jest": "^27.5.1",
+    "jest-junit": "^17.0.0"
+}
+```
+
+---
+
+## Setup Instructions
+
+### 1. Jenkins Setup
+- Download and install Jenkins from [jenkins.io](https://jenkins.io/download)
+- Run Jenkins on `localhost:8080`
+- Install required plugins:
+  - NodeJS Plugin
+  - Pipeline
+  - GitHub Integration
+  - Git
+
+### 2. Configure Node.js in Jenkins
+- Go to **Manage Jenkins → Tools → NodeJS**
+- Add NodeJS installation with version 26.1.0
+- Name it `NodeJS`
+
+### 3. Add GitHub Credentials
+- Go to **Manage Jenkins → Credentials**
+- Add **Username with Password**
+- Use GitHub Personal Access Token (PAT) as password
+
+### 4. Create Pipeline Job
+- Click **New Item → Pipeline**
+- Set Definition to **Pipeline script from SCM**
+- Set SCM to **Git**
+- Enter repository URL
+- Set branch to `*/main`
+- Set Script Path to `Jenkinsfile`
+
+---
+
+## Test Results
+The pipeline runs a simple unit test using Jest:
+
+```javascript
+test('simple test', () => {
+  expect(1 + 1).toBe(2);
+});
+```
+
+---
+
+## Challenges Faced
+
+### 1. Jenkins Login Issue
+- Could not sign in with the original credentials
+- **Solution:** Disabled security in `config.xml` located at `C:\ProgramData\Jenkins\.jenkins\config.xml`, reset the password, then re-enabled security
+
+### 2. Docker Container Conflict
+- A previous Jenkins Docker container was conflicting with the Jenkins Windows service
+- **Solution:** Stopped and removed the Jenkins Docker containers using `docker stop` and `docker rm` commands
+
+### 3. Plugin Installation Issues
+- Jenkins plugin update center was redirecting to a Chinese mirror that was inaccessible
+- **Solution:** Manually downloaded `.hpi` plugin files and uploaded them via Jenkins Advanced Settings
+
+### 4. Missing Test Script
+- The `package.json` did not have a test script configured
+- **Solution:** Added Jest and jest-junit as dev dependencies and configured the test script
+
+### 5. Git Push Failures
+- Large `node_modules` folder caused HTTP 408 timeout errors during push
+- **Solution:** Created `.gitignore` file to exclude `node_modules` and removed it from git tracking using `git rm -r --cached node_modules`
+
+### 6. Wrong Repository URL
+- Jenkins was pulling from the wrong GitHub repository
+- **Solution:** Updated both the Jenkins pipeline configuration and the Jenkinsfile to use the correct repository URL
+
+---
+
+## GitHub Repository
+[https://github.com/yoezer33/TandinYoezerWangmo_02250374_DSO101_A1](https://github.com/yoezer33/TandinYoezerWangmo_02250374_DSO101_A1)
+
+
 ## Assignment 3 - CI/CD Pipeline
 
 ### Pipeline Overview
